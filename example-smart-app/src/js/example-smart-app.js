@@ -50,6 +50,7 @@
           
           if (!data.entry || !data.entry.length){
             med = 'no medicine';
+            console.log('Nomed:', med);
           }
           else{
             for (let i = 0; i < data.entry.length; i++) {
@@ -57,6 +58,7 @@
                 smart.getPath(data.entry[i], "resource.medicationCodeableConcept.coding") ||
                 smart.getPath(data.entry[i], "resource.medicationReference.code.coding")
               );
+              console.log('med:', med);
             }  
              
           }
