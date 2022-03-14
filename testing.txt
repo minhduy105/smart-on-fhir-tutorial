@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-tesasegiasdas==
-=======
 tesasegiasdasd
->>>>>>> 3429014f638a0fab29e46c459814aec66e58376c
