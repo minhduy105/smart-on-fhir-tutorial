@@ -7,7 +7,15 @@
       ret.reject();
     }
 
+    function getMedicationName(medCodings) {
+      var coding = medCodings.find(function(c){
+        return c.system == "http://www.nlm.nih.gov/research/umls/rxnorm";
+      });
+      return coding && coding.display || "Unnamed Medication(TM)";
+    }
     function onReady(smart)  {
+      
+
       if (smart.hasOwnProperty('patient')) {
         var patient = smart.patient;
         var pt = patient.read();
@@ -21,6 +29,8 @@
                       }
                     }
                   });
+        
+        
 
         $.when(pt, obv).fail(onError);
 
@@ -31,6 +41,26 @@
           var fname = '';
           var lname = '';
 
+          var med  = '';
+          // Get MedicationRequests for the selected patient
+          var data = smart.request("/MedicationRequest?patient=" + patient.id, {
+            resolveReferences: [ "medicationReference" ],
+            graph: true
+          })
+          
+          if (!data.entry || !data.entry.length){
+            med = 'no medicine';
+          }
+          else{
+            for (let i = 0; i < data.entry.length; i++) {
+              med += getMedicationName(
+                smart.getPath(data.entry[i], "resource.medicationCodeableConcept.coding") ||
+                smart.getPath(data.entry[i], "resource.medicationReference.code.coding")
+              );
+            }  
+             
+          }
+          
           if (typeof patient.name[0] !== 'undefined') {
             fname = patient.name[0].given.join(' ');
             lname = patient.name[0].family.join(' ');
@@ -59,6 +89,7 @@
 
           p.hdl = getQuantityValueAndUnit(hdl[0]);
           p.ldl = getQuantityValueAndUnit(ldl[0]);
+          p.med = med;
 
           ret.resolve(p);
         });
@@ -83,6 +114,7 @@
       diastolicbp: {value: ''},
       ldl: {value: ''},
       hdl: {value: ''},
+      med: {value: ''},
     };
   }
 
@@ -126,6 +158,7 @@
     $('#diastolicbp').html(p.diastolicbp);
     $('#ldl').html(p.ldl);
     $('#hdl').html(p.hdl);
+    $('#med').html(p.med);
   };
 
 })(window);
