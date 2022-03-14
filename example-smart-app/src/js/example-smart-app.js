@@ -43,11 +43,15 @@
 
           var med  = '';
           // Get MedicationRequests for the selected patient
+
+          var data = patient.medicationReference;
+          /*
           var data = smart.request("/MedicationRequest?patient=" + patient.id, {
             resolveReferences: [ "medicationReference" ],
             graph: true
           })
-          
+          */
+
           if (!data.entry || !data.entry.length){
             med = 'no medicine';
             console.log('Nomed:', med);
