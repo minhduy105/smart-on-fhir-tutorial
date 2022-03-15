@@ -1,21 +1,5 @@
 (function(window){
   window.extractData = function() {
-    var client = FHIR.oauth2.init({
-      // The client_id that you should have obtained after registering a client at the EHR.
-      clientId: "a425f05b-3829-4b09-9bb1-b7ca99f9f993",
-
-      // The scopes that you request from the EHR
-      scope: [
-        "launch/patient",  // request the current patient
-        "openid fhirUser",  // Get the current user
-        "online_access",   // request a refresh token
-        "patient/*.read",  // read patient data
-      ].join(" "),
-
-      redirectUri: "./index.html",
-
-      iss: "https://launch.smarthealthit.org/v/r3/sim/eyJrIjoiMSIsImIiOiJzbWFydC04ODg4ODA0In0/fhir"
-    })
 
     var ret = $.Deferred();
 
@@ -24,12 +8,6 @@
       ret.reject();
     }
 
-    function getMedicationName(medCodings) {
-      var coding = medCodings.find(function(c){
-        return c.system == "http://www.nlm.nih.gov/research/umls/rxnorm";
-      });
-      return coding && coding.display || "Unnamed Medication(TM)";
-    }
     function onReady(smart)  {
       
 
@@ -64,25 +42,11 @@
           var fname = '';
           var lname = '';
 
-          var med  = '';
+
           // Get MedicationRequests for the selected patient
 
           
 
-          if (!data.entry || !data.entry.length){
-            med = 'no medicine';
-            console.log('Nomed:', med);
-          }
-          else{
-            for (let i = 0; i < data.entry.length; i++) {
-              med += getMedicationName(
-                smart.getPath(data.entry[i], "resource.medicationCodeableConcept.coding") ||
-                smart.getPath(data.entry[i], "resource.medicationReference.code.coding")
-              );
-              console.log('med:', med);
-            }  
-             
-          }
           
           if (typeof patient.name[0] !== 'undefined') {
             fname = patient.name[0].given.join(' ');
@@ -112,7 +76,7 @@
 
           p.hdl = getQuantityValueAndUnit(hdl[0]);
           p.ldl = getQuantityValueAndUnit(ldl[0]);
-          p.med = med;
+
 
           ret.resolve(p);
         });
@@ -137,7 +101,7 @@
       diastolicbp: {value: ''},
       ldl: {value: ''},
       hdl: {value: ''},
-      med: {value: ''},
+
     };
   }
 
@@ -181,7 +145,6 @@
     $('#diastolicbp').html(p.diastolicbp);
     $('#ldl').html(p.ldl);
     $('#hdl').html(p.hdl);
-    $('#med').html(p.med);
   };
 
 })(window);
