@@ -24,14 +24,6 @@
                       }
                     }
                   });
-        
-        //var data = patient.medicationReference;
-        
-        var data = client.request("/MedicationRequest?patient=" + client.patient.id, {
-          resolveReferences: [ "medicationReference" ],
-          graph: true
-        })
-        
 
         $.when(pt, obv).fail(onError);
 
