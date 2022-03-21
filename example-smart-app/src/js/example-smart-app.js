@@ -81,7 +81,7 @@
     var data = client.request("/MedicationRequest?patient=" + client.patient.id, {
       resolveReferences: [ "medicationReference" ],
       graph: true
-    })
+    });
 
     return ret.promise();
 
