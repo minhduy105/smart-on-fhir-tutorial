@@ -77,12 +77,47 @@
       }
     }
 
-    var client = FHIR.oauth2.ready(onReady, onError);
-    var data = client.request("/MedicationRequest?patient=" + client.patient.id, {
-      resolveReferences: [ "medicationReference" ],
-      graph: true
-    });
+    var render = createRenderer("med");
 
+    function getMedicationName(medCodings) {
+      var coding = medCodings.find(function(c){
+        return c.system == "http://www.nlm.nih.gov/research/umls/rxnorm";
+      });
+      return coding && coding.display || "Unnamed Medication(TM)";
+    }
+    
+    FHIR.oauth2.ready(onReady, onError).then(function(client) {
+        
+      // Get MedicationRequests for the selected patient
+      client.request("/MedicationRequest?patient=" + client.patient.id, {
+        resolveReferences: [ "medicationReference" ],
+        graph: true
+      })
+        
+      // Reject if no MedicationRequests are found
+      .then(function(data) {
+        if (!data.entry || !data.entry.length) {
+          throw new Error("No medications found for the selected patient");
+        }
+        return data.entry;
+      })
+      
+      // Build an array of medication names
+      .then(function(entries) {
+        return entries.map(function(item) {
+          return getMedicationName(
+            client.getPath(item, "resource.medicationCodeableConcept.coding") ||
+            client.getPath(item, "resource.medicationReference.code.coding")
+          );
+        });
+      })
+
+      // Render the list
+      .then(render);
+    })
+    
+    // Render any errors
+    .catch(render);
     return ret.promise();
 
   };
