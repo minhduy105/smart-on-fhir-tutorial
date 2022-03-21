@@ -1,6 +1,5 @@
 (function(window){
   window.extractData = function() {
-
     var ret = $.Deferred();
 
     function onError() {
@@ -9,8 +8,6 @@
     }
 
     function onReady(smart)  {
-      
-
       if (smart.hasOwnProperty('patient')) {
         var patient = smart.patient;
         var pt = patient.read();
@@ -34,12 +31,6 @@
           var fname = '';
           var lname = '';
 
-
-          // Get MedicationRequests for the selected patient
-
-          
-
-          
           if (typeof patient.name[0] !== 'undefined') {
             fname = patient.name[0].given.join(' ');
             lname = patient.name[0].family.join(' ');
@@ -69,7 +60,6 @@
           p.hdl = getQuantityValueAndUnit(hdl[0]);
           p.ldl = getQuantityValueAndUnit(ldl[0]);
 
-
           ret.resolve(p);
         });
       } else {
@@ -77,47 +67,7 @@
       }
     }
 
-    var render = createRenderer("med");
-
-    function getMedicationName(medCodings) {
-      var coding = medCodings.find(function(c){
-        return c.system == "http://www.nlm.nih.gov/research/umls/rxnorm";
-      });
-      return coding && coding.display || "Unnamed Medication(TM)";
-    }
-    
-    FHIR.oauth2.ready(onReady, onError).then(function(client) {
-        
-      // Get MedicationRequests for the selected patient
-      client.request("/MedicationRequest?patient=" + client.patient.id, {
-        resolveReferences: [ "medicationReference" ],
-        graph: true
-      })
-        
-      // Reject if no MedicationRequests are found
-      .then(function(data) {
-        if (!data.entry || !data.entry.length) {
-          throw new Error("No medications found for the selected patient");
-        }
-        return data.entry;
-      })
-      
-      // Build an array of medication names
-      .then(function(entries) {
-        return entries.map(function(item) {
-          return getMedicationName(
-            client.getPath(item, "resource.medicationCodeableConcept.coding") ||
-            client.getPath(item, "resource.medicationReference.code.coding")
-          );
-        });
-      })
-
-      // Render the list
-      .then(render);
-    })
-    
-    // Render any errors
-    .catch(render);
+    FHIR.oauth2.ready(onReady, onError);
     return ret.promise();
 
   };
@@ -133,7 +83,6 @@
       diastolicbp: {value: ''},
       ldl: {value: ''},
       hdl: {value: ''},
-
     };
   }
 
