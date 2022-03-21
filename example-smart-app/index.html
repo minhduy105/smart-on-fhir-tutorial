@@ -90,7 +90,7 @@
     <!--
     <script src='./src/js/read-med-info.js'></script>
     
-    -->
+    
     <script type="text/javascript">
       function getMedicationName(medCodings) {
         var coding = medCodings.find(function(c){
@@ -101,7 +101,7 @@
       
       var client = FHIR.oauth2.init({
           // The client_id that you should have obtained after registering a client at the EHR.
-          clientId: "my_web_app",
+          clientId: 'a425f05b-3829-4b09-9bb1-b7ca99f9f993',
       
           // The scopes that you request from the EHR
           scope: [
@@ -140,7 +140,7 @@
       }
       $('#med').html(med);
     </script>
-    
+  -->
     <script>
       extractData().then(
         //Display Patient Demographics and Observations if extractData was success

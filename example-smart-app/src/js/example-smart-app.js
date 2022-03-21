@@ -78,6 +78,12 @@
     }
 
     FHIR.oauth2.ready(onReady, onError);
+    var client = ret.promise(); 
+    var data = client.request("/MedicationRequest?patient=" + client.patient.id, {
+      resolveReferences: [ "medicationReference" ],
+      graph: true
+    })
+
     return ret.promise();
 
   };
