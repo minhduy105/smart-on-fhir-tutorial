@@ -7,6 +7,14 @@
       ret.reject();
     }
 
+
+    function getMedicationName(medCodings) {
+      var coding = medCodings.find(function(c) {
+          return c.system == "http://www.nlm.nih.gov/research/umls/rxnorm";
+      });
+      return coding && coding.display || "Unnamed Medication(TM)";
+    }
+
     function onReady(smart)  {
       if (smart.hasOwnProperty('patient')) {
         var patient = smart.patient;
@@ -45,7 +53,25 @@
           var diastolicbp = getBloodPressureValue(byCodes('55284-4'),'8462-4');
           var hdl = byCodes('2085-9');
           var ldl = byCodes('2089-1');
+          
+          var med_list = [];
+          var med_name = ''
 
+          if (medOrd[0].length) {
+            med_list.innerHTML = "";
+            medOrd[0].forEach(function(prescription) {
+                if (prescription.medicationCodeableConcept) {
+                    med_name = getMedicationName(prescription.medicationCodeableConcept.coding);
+                    med_list.push(med_name);
+                } else if (prescription.medicationReference) {
+                    var med = refs(prescription, prescription.medicationReference);
+                    med_name = getMedicationName(med && med.code.coding || []);
+                    med_list.push(med_name);
+                }
+            });
+          }
+          
+          
           var p = defaultPatient();
           p.birthdate = patient.birthDate;
           p.gender = gender;
