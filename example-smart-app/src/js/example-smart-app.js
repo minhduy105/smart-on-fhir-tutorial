@@ -55,6 +55,7 @@
           var ldl = byCodes('2089-1');
           
           var med_list = '';
+          var med_arry = [];
           var med_name = '';
 
           if (medOrd[0].length) {
@@ -67,11 +68,13 @@
                     }
                     med_name = med_name + ' -Date Written: ' + prescription.dateWritten;
                     med_list = med_list + '\n' + med_name;
+                    med_arry.push(med_name);
                 } else if (prescription.medicationReference) {
                     var med = refs(prescription, prescription.medicationReference);
                     med_name = getMedicationName(med && med.code.coding || []);
                     med_name = med_name + ' -Date Written: ' + prescription.dateWritten;
                     med_list = med_list + '\n' + med_name;
+                    med_arry.push(med_name);
                 }
             });
           }
