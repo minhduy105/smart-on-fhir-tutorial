@@ -21,10 +21,19 @@
                       }
                     }
                   });
+        
+        var medOrd = smart.api.fetchAllWithReferences(
+                    { 
+                        type: "MedicationRequest",
+                        query: {
+                            patient: pt.id
+                        }
+                    },
+                    [ "MedicationRequest.medicationReference" ]);
 
-        $.when(pt, obv).fail(onError);
+        $.when(pt, obv, medOrd).fail(onError);
 
-        $.when(pt, obv).done(function(patient, obv) {
+        $.when(pt, obv, medOrd).done(function(patient, obv, medOrd) {
           var byCodes = smart.byCodes(obv, 'code');
           var gender = patient.gender;
 
