@@ -1,7 +1,7 @@
 (function(window){
   window.extractData = function() {
-    var med_list = document.getElementById('med');
-    var med_date_writen = document.getElementById('dateWriten');
+    var medList = document.getElementById('med');
+    var medDateWriten = document.getElementById('dateWriten');
     
     var ret = $.Deferred();
 
@@ -33,10 +33,6 @@
                     }
                   });
         
-        //var medOrd = smart.api.fetchAllWithReferences(
-        //            { type: "MedicationOrder" },
-        //              [ "MedicationOrder.medicationReference" ]);
-
         var medOrd = patient.api.fetchAllWithReferences(
                     { type: "MedicationOrder" },
                       [ "MedicationOrder.medicationReference" ]);
@@ -62,25 +58,25 @@
           var ldl = byCodes('2089-1');
           
           
-          var med_arry = [];
-          var med_name = '';
+          var medArray = [];
+          var medName = '';
 
           if (medOrd[0].length) {
             medOrd[0].forEach(function(prescription) {
                 if (prescription.medicationCodeableConcept) {
                     if (prescription.medicationCodeableConcept.coding){
-                        med_name = getMedicationName(prescription.medicationCodeableConcept.coding);
+                        medName = getMedicationName(prescription.medicationCodeableConcept.coding);
                     }else{
-                        med_name = prescription.medicationCodeableConcept.text;
+                        medName = prescription.medicationCodeableConcept.text;
                     }
                 } else if (prescription.medicationReference) {
                     var med = refs(prescription, prescription.medicationReference);
-                    med_name = getMedicationName(med && med.code.coding || []);
+                    medName = getMedicationName(med && med.code.coding || []);
                 }
-                med_list.innerHTML += "<li> " + med_name + "</li>";
-                med_date_writen.innerHTML += "<li> " +  prescription.dateWritten + "</li>";
-                med_name = med_name + ' -Date Written: ' + prescription.dateWritten;
-                med_arry.push(med_name);
+                medList.innerHTML += "<li> " + medName + "</li>";
+                medDateWriten.innerHTML += "<li> " +  prescription.dateWritten + "</li>";
+                medName = medName + ' -Date Written: ' + prescription.dateWritten;
+                medArray.push(medName);
 
             });
           }
@@ -104,7 +100,7 @@
           p.hdl = getQuantityValueAndUnit(hdl[0]);
           p.ldl = getQuantityValueAndUnit(ldl[0]);
 
-          p.med = med_arry;
+          p.med = medArray;
 
           ret.resolve(p);
         });
