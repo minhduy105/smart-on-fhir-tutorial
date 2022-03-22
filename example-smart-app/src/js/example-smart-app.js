@@ -65,10 +65,12 @@
                     }else{
                         med_name = prescription.medicationCodeableConcept.text;
                     }
+                    med_name = med_name + ' -Date Written: ' + prescription.dateWritten;
                     med_list.push(med_name);
                 } else if (prescription.medicationReference) {
                     var med = refs(prescription, prescription.medicationReference);
                     med_name = getMedicationName(med && med.code.coding || []);
+                    med_name = med_name + ' -Date Written: ' + prescription.dateWritten;
                     med_list.push(med_name);
                 }
             });
