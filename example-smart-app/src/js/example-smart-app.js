@@ -20,7 +20,7 @@
       if (smart.hasOwnProperty('patient')) {
         var patient = smart.patient;
         var pt = patient.read();
-        var obv = smart.patient.api.fetchAll({
+        var obv =patient.api.fetchAll({
                     type: 'Observation',
                     query: {
                       code: {
@@ -31,7 +31,11 @@
                     }
                   });
         
-        var medOrd = smart.api.fetchAllWithReferences(
+        //var medOrd = smart.api.fetchAllWithReferences(
+        //            { type: "MedicationOrder" },
+        //              [ "MedicationOrder.medicationReference" ]);
+
+        var medOrd = patient.api.fetchAllWithReferences(
                     { type: "MedicationOrder" },
                       [ "MedicationOrder.medicationReference" ]);
 
