@@ -58,7 +58,6 @@
           var med_name = ''
 
           if (medOrd[0].length) {
-            med_list.innerHTML = "";
             medOrd[0].forEach(function(prescription) {
                 if (prescription.medicationCodeableConcept) {
                     med_name = getMedicationName(prescription.medicationCodeableConcept.coding);
