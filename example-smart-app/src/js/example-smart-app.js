@@ -60,7 +60,11 @@
           if (medOrd[0].length) {
             medOrd[0].forEach(function(prescription) {
                 if (prescription.medicationCodeableConcept) {
-                    med_name = getMedicationName(prescription.medicationCodeableConcept.coding);
+                    if (prescription.medicationCodeableConcept.coding){
+                        med_name = getMedicationName(prescription.medicationCodeableConcept.coding);
+                    }else{
+                        med_name = prescription.medicationCodeableConcept.text;
+                    }
                     med_list.push(med_name);
                 } else if (prescription.medicationReference) {
                     var med = refs(prescription, prescription.medicationReference);
