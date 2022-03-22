@@ -1,6 +1,8 @@
 (function(window){
   window.extractData = function() {
     var med_list = document.getElementById('med');
+    var med_date_writen = document.getElementById('dateWriten');
+    
     var ret = $.Deferred();
 
     function onError() {
@@ -75,9 +77,11 @@
                     var med = refs(prescription, prescription.medicationReference);
                     med_name = getMedicationName(med && med.code.coding || []);
                 }
+                med_list.innerHTML += "<li> " + med_name + "</li>";
+                med_date_writen.innerHTML += "<li> " +  prescription.dateWritten + "</li>";
                 med_name = med_name + ' -Date Written: ' + prescription.dateWritten;
                 med_arry.push(med_name);
-                med_list.innerHTML += "<li> " + med_name + "</li>";
+
             });
           }
           
