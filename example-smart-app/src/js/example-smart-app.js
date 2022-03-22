@@ -54,8 +54,8 @@
           var hdl = byCodes('2085-9');
           var ldl = byCodes('2089-1');
           
-          var med_list = [];
-          var med_name = ''
+          var med_list = '';
+          var med_name = '';
 
           if (medOrd[0].length) {
             medOrd[0].forEach(function(prescription) {
@@ -66,12 +66,12 @@
                         med_name = prescription.medicationCodeableConcept.text;
                     }
                     med_name = med_name + ' -Date Written: ' + prescription.dateWritten;
-                    med_list.push(med_name);
+                    med_list = med_list + '\n' + med_name;
                 } else if (prescription.medicationReference) {
                     var med = refs(prescription, prescription.medicationReference);
                     med_name = getMedicationName(med && med.code.coding || []);
                     med_name = med_name + ' -Date Written: ' + prescription.dateWritten;
-                    med_list.push(med_name);
+                    med_list = med_list + '\n' + med_name;
                 }
             });
           }
@@ -94,6 +94,8 @@
 
           p.hdl = getQuantityValueAndUnit(hdl[0]);
           p.ldl = getQuantityValueAndUnit(ldl[0]);
+
+          p.med = med_list;
 
           ret.resolve(p);
         });
@@ -118,6 +120,7 @@
       diastolicbp: {value: ''},
       ldl: {value: ''},
       hdl: {value: ''},
+      med: {value: ''},
     };
   }
 
@@ -161,6 +164,7 @@
     $('#diastolicbp').html(p.diastolicbp);
     $('#ldl').html(p.ldl);
     $('#hdl').html(p.hdl);
+    $('#med').html(p.med);
   };
 
 })(window);
