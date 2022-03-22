@@ -63,20 +63,22 @@
 
           if (medOrd[0].length) {
             medOrd[0].forEach(function(prescription) {
+                medName = '';  
                 if (prescription.medicationCodeableConcept) {
+                    // only take in the one that has coding 
                     if (prescription.medicationCodeableConcept.coding){
                         medName = getMedicationName(prescription.medicationCodeableConcept.coding);
-                    }else{
-                        medName = prescription.medicationCodeableConcept.text;
                     }
                 } else if (prescription.medicationReference) {
                     var med = refs(prescription, prescription.medicationReference);
                     medName = getMedicationName(med && med.code.coding || []);
                 }
-                medList.innerHTML += "<li> " + medName + "</li>";
-                medDateWriten.innerHTML += "<li> " +  prescription.dateWritten + "</li>";
-                medName = medName + ' -Date Written: ' + prescription.dateWritten;
-                medArray.push(medName);
+                if (medName !== ''){
+                    medList.innerHTML += "<li> " + medName + "</li>";
+                    medDateWriten.innerHTML += "<li> " +  prescription.dateWritten + "</li>";
+                    medName = medName + ' -Date Written: ' + prescription.dateWritten;
+                    medArray.push(medName);
+                }  
 
             });
           }
