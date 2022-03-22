@@ -1,5 +1,6 @@
 (function(window){
   window.extractData = function() {
+    var med_list = document.getElementById('med');
     var ret = $.Deferred();
 
     function onError() {
@@ -54,7 +55,7 @@
           var hdl = byCodes('2085-9');
           var ldl = byCodes('2089-1');
           
-          var med_list = '';
+          
           var med_arry = [];
           var med_name = '';
 
@@ -66,16 +67,13 @@
                     }else{
                         med_name = prescription.medicationCodeableConcept.text;
                     }
-                    med_name = med_name + ' -Date Written: ' + prescription.dateWritten;
-                    //med_list = med_list + '\n' + med_name;
-                    med_arry.push(med_name);
                 } else if (prescription.medicationReference) {
                     var med = refs(prescription, prescription.medicationReference);
                     med_name = getMedicationName(med && med.code.coding || []);
-                    med_name = med_name + ' -Date Written: ' + prescription.dateWritten;
-                    //med_list = med_list + '\n' + med_name;
-                    med_arry.push(med_name);
                 }
+                med_name = med_name + ' -Date Written: ' + prescription.dateWritten;
+                med_arry.push(med_name);
+                med_list.innerHTML += "<li> " + med_name + "</li>";
             });
           }
           
@@ -168,7 +166,7 @@
     $('#ldl').html(p.ldl);
     $('#hdl').html(p.hdl);
     //$('#med').html(p.med);
-    document.getElementById('med').innerHTML = p.med ;
+    
   };
 
 })(window);
