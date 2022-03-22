@@ -23,13 +23,8 @@
                   });
         
         var medOrd = smart.api.fetchAllWithReferences(
-                    { 
-                        type: "MedicationRequest",
-                        query: {
-                            patient: pt.id
-                        }
-                    },
-                    [ "MedicationRequest.medicationReference" ]);
+                    { type: "MedicationOrder" },
+                      [ "MedicationOrder.medicationReference" ]);
 
         $.when(pt, obv, medOrd).fail(onError);
 
