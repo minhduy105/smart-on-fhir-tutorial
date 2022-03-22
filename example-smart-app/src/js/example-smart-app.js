@@ -67,13 +67,13 @@
                         med_name = prescription.medicationCodeableConcept.text;
                     }
                     med_name = med_name + ' -Date Written: ' + prescription.dateWritten;
-                    med_list = med_list + '\n' + med_name;
+                    //med_list = med_list + '\n' + med_name;
                     med_arry.push(med_name);
                 } else if (prescription.medicationReference) {
                     var med = refs(prescription, prescription.medicationReference);
                     med_name = getMedicationName(med && med.code.coding || []);
                     med_name = med_name + ' -Date Written: ' + prescription.dateWritten;
-                    med_list = med_list + '\n' + med_name;
+                    //med_list = med_list + '\n' + med_name;
                     med_arry.push(med_name);
                 }
             });
@@ -98,7 +98,7 @@
           p.hdl = getQuantityValueAndUnit(hdl[0]);
           p.ldl = getQuantityValueAndUnit(ldl[0]);
 
-          p.med = med_list;
+          p.med = med_arry;
 
           ret.resolve(p);
         });
@@ -167,7 +167,8 @@
     $('#diastolicbp').html(p.diastolicbp);
     $('#ldl').html(p.ldl);
     $('#hdl').html(p.hdl);
-    $('#med').html(p.med);
+    //$('#med').html(p.med);
+    document.getElementById('med').innerHTML = p.med ;
   };
 
 })(window);
