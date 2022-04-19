@@ -2,15 +2,15 @@
 //https://stackoverflow.com/questions/48073151/read-local-json-file-into-variable
 window.extractData = function() {
 
-    fetch('crediblemeds.json')
-    .then(function (response) {
-        return response.json();
+    return fetch('crediblemeds.json')
+        .then(function (response) {
+            return response.json();
         })
         .then(function (data) {
-        return doCode(data);
+            return Promise.resolve(doCode(data));
         })
         .catch(function (err) {
-        console.log('error: ' + err);
+            console.log('error: ' + err);
         });
     
 };
