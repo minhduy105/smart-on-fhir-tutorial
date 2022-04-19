@@ -1,6 +1,20 @@
 (function(window){
   //https://stackoverflow.com/questions/48073151/read-local-json-file-into-variable
   window.extractData = function() {
+
+    fetch('crediblemeds.json')
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function (data) {
+        doCode(data);
+    })
+    .catch(function (err) {
+        console.log('error: ' + err);
+    });
+  };
+
+  function doCode(data){
     var medList = document.getElementById('med');
     var medDateWriten = document.getElementById('dateWriten');
     
@@ -120,8 +134,7 @@
 
     FHIR.oauth2.ready(onReady, onError);
     return ret.promise();
-
-  };
+  }
 
   function defaultPatient(){
     return {
