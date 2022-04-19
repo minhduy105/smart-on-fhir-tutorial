@@ -7,7 +7,7 @@ window.extractData = function() {
         return response.json();
         })
         .then(function (data) {
-        doCode(data);
+        return doCode(data);
         })
         .catch(function (err) {
         console.log('error: ' + err);
