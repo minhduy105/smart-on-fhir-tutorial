@@ -46,14 +46,17 @@ function doCode(data){
     function getCategory(medCodings) {
         if (parseInt(medCodings) in med_dict){
             switch(med_dict[medCodings].category) {
-                case "K":
-                    return "K: Know Risk";
+                case "R":
+                    return "R: Know Risk";
                   
                 case "P":
                     return "P: Possible Risk";
                   
                 case "C":
                     return "C: Conditional Risk";
+
+                case "A":
+                    return "A: Drugs to Avoid ";
                 
                 default:
                     return med_dict[medCodings].category; 
