@@ -23,7 +23,7 @@ function doCode(data){
     var medCategory = document.getElementById('category');
 
     let med_dict = {};
-    var results = data[0].Results;
+    var results = data.Results;
     for (let idx in results) {
         med_dict[results[idx].rxnorm_id] = results[idx];
     }
@@ -44,8 +44,25 @@ function doCode(data){
     }
 
     function getCategory(medCodings) {
-        
-        return med_dict[medCodings].category || "No Category";
+        if (medCodings in med_dict){
+            switch(med_dict[medCodings].category) {
+                case "K":
+                    return "K: Know Risk"
+                  
+                case "P":
+                    return "P: Possible Risk"
+                  
+                case "C":
+                    return "C: Conditional Risk"
+                
+                default:
+                    return med_dict[medCodings].category; 
+                  
+            }
+
+        }else{
+            return "No Category";
+        }
     }
 
     function defaultPatient(){
