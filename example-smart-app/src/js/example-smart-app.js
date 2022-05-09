@@ -47,17 +47,16 @@ function doCode(data){
         if (medCodings in med_dict){
             switch(med_dict[medCodings].category) {
                 case "K":
-                    return "K: Know Risk"
+                    return "K: Know Risk";
                   
                 case "P":
-                    return "P: Possible Risk"
+                    return "P: Possible Risk";
                   
                 case "C":
-                    return "C: Conditional Risk"
+                    return "C: Conditional Risk";
                 
                 default:
                     return med_dict[medCodings].category; 
-                  
             }
 
         }else{
