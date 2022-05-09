@@ -23,9 +23,16 @@ function doCode(data){
     var medCategory = document.getElementById('category');
 
     let med_dict = {};
+    let med_dict_name = {};
     var results = data.Results;
     for (let idx in results) {
-        med_dict[results[idx].rxnorm_id] = results[idx];
+        if (results[idx].rxnorm_id == ""){
+            med_dict_name[results[idx].generic_name] = results[idx];        
+        } 
+    
+        else{
+            med_dict[results[idx].rxnorm_id] = results[idx];
+        }
     }
 
     var ret = $.Deferred();
@@ -41,6 +48,30 @@ function doCode(data){
         return c.system == "http://www.nlm.nih.gov/research/umls/rxnorm";
         });
         return coding && coding.display || "Unnamed Medication(TM)";
+    }
+
+    function getCategoryFromName(medName) {
+        if (medName in med_dict_name){
+            switch(med_dict_name[medName].category) {
+                case "R":
+                    return "R: Know Risk";
+                  
+                case "P":
+                    return "P: Possible Risk";
+                  
+                case "C":
+                    return "C: Conditional Risk";
+
+                case "A":
+                    return "A: Drugs to Avoid ";
+                
+                default:
+                    return memed_dict_named_dict[medName].category; 
+            }
+
+        }else{
+            return "No Category";
+        }
     }
 
     function getCategory(medCodings) {
@@ -156,6 +187,7 @@ function doCode(data){
 
                 var medArray = [];
                 var medName = '';
+                var medCat = '';
 
                 if (medOrd[0].length) {
                     medOrd[0].forEach(function(prescription) {
@@ -165,7 +197,7 @@ function doCode(data){
                             medCat = getCategory(prescription.medicationCodeableConcept.coding[0].code);
                         }else{
                         medName = prescription.medicationCodeableConcept.text;
-                        medCat = "No Category";
+                        medCat = getCategoryFromName(prescription.medicationCodeableConcept.text);
                         }
                     } else if (prescription.medicationReference) {
                         var med = refs(prescription, prescription.medicationReference);
