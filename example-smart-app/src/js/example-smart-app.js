@@ -159,7 +159,7 @@ function doCode(data){
                     if (prescription.medicationCodeableConcept) {
                         if (prescription.medicationCodeableConcept.coding){
                             medName = getMedicationName(prescription.medicationCodeableConcept.coding);
-                            medCat = getCategory(prescription.medicationCodeableConcept.coding);
+                            medCat = getCategory(prescription.medicationCodeableConcept.coding[0].code);
                         }else{
                         medName = prescription.medicationCodeableConcept.text;
                         medCat = "No Category";
@@ -167,7 +167,7 @@ function doCode(data){
                     } else if (prescription.medicationReference) {
                         var med = refs(prescription, prescription.medicationReference);
                         medName = getMedicationName(med && med.code.coding || []);
-                        medCat = getCategory(med && med.code.coding || []);
+                        medCat = getCategory(med && med.code.coding[0].code || []);
                     }
 
                     medList.innerHTML += "<li> " + medName + "</li>";
